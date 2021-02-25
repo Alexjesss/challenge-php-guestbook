@@ -3,40 +3,50 @@ declare(strict_types=1);
 include 'includes/autoloader.inc.php';
 
 $errors = [
-    ['title_error' => "",
-        'date_error' => "",
-        'authorName_error' => "",
-        'content_error' => "",
-    ]
-    ];
-  $userInput = [
-      ['title' => "",
-          'date' => "",
-          'authorName' => "",
-          'content' => "",
-      ]
-  ];
+    'title_error' => "",
+    'authorName_error' => "",
+    'content_error' => "",
+];
+$userInput = [
+    'title' => "",
+    'authorName' => "",
+    'content' => "",
+];
 
-if(isset($_REQUEST['title'])) {
-$file = 'saveContent.txt';
-$str = $_POST['title'] . "\n";
-$temp = file_get_contents($file);
-$content = $str.$temp;
-file_put_contents($file, $content);
+if (($_SERVER["REQUEST_METHOD"] == "POST") && isset($_POST['submit'])) {
+    if (empty($_POST["title"])) {
+        $errors['title'] = "* input required";
+    } elseif (!empty($_POST['title']) && is_numeric($_POST['title'])) {
+        $errors['title'] = "* text characters only";
+}
+else {
+        $userInput['title'] = modified_input($_POST['title']);
+    }
 
-// echo success message
-echo "Saved to $file successfully!";
-echo "<br>";
-echo "Previous messages:";
-echo "<hr>";
+    if (empty($_POST["content"])){
+        $errors['content'] = "* input required";
+    }
+    else {
+        $userInput['content'] = modified_input($_POST['content']);
+    }
 
-// print out previous posts
-$file = file_get_contents('saveContent.txt');
+    if (empty($_POST["name"])){
+        $errors['content'] = "* input required";
+    }
+    elseif (!empty($_POST['name']) && is_numeric($_POST['name'])) {
+        $errors['name'] = "* text characters only";
+    } else {
+        $userInput['name'] = modified_input($_POST['name']);
+    }
 }
 
+if (isset($_POST['submit'])) {
+    $post = new Post($_POST['title'],date('Y-m-d H:i:s'),$_POST['content'],$_POST['authorName']);
+    $postLoader = new PostLoader();
+    $postLoader->storeAndLoadMessages($post);
+}
 
-
-function modified_input($input): string
+function modified_input($input)
 {
     $input = trim($input);
     $input = stripslashes($input);
@@ -58,24 +68,24 @@ function modified_input($input): string
     <title>guestbook</title>
 </head>
 <body>
-<form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="title">Title:</label>
             <input type="text" name="title" class="form-control">
-            <span></span>
+            <span><?php ?></span>
         </div>
         <div class="form-group col-md-6">
             <label for="content">Content:</label>
             <input type="text" name="content" class="form-control">
-            <span></span>
+            <span><?php ?></span>
         </div>
         <div class="form-group col-md-6">
             <label for="authorName">Your name:</label>
             <input type="text" name="authorName" class="form-control">
-            <span></span>
+            <span><?php ?></span>
         </div>
-        <button type="submit" class="btn btn-primary">Send!</button>
+        <button type="submit" name="submit" class="btn btn-primary">Send!</button>
 </form>
 </body>
 </html>
