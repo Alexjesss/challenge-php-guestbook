@@ -8,8 +8,6 @@ class Post
     private string $Content;
     private string $Author_name;
 
-
-
     public function __construct(string $Title, string $Date, string $Content, string $Author_name)
     {
         $this->Title = $Title;
@@ -22,7 +20,7 @@ class Post
     {
         return
             [
-            'name'=>$this->Title,
+            'title'=>$this->Title,
             'date'=>$this->Date,
             'content'=>$this->Content,
             'authorName'=>$this->Author_name,
