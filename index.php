@@ -43,7 +43,7 @@ else {
 if (isset($_POST['submit'])) {
     $post = new Post($_POST['title'],date('Y-m-d H:i:s'),$_POST['content'],$_POST['authorName']);
     $postLoader = new PostLoader();
-    $postLoader->storeAndLoadMessages($post);
+    $postLoader->storeMessages($post);
 }
 
 function modified_input($input)
