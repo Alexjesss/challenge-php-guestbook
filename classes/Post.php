@@ -20,11 +20,11 @@ class Post
     {
         return
             [
-            'title'=>$this->Title,
-            'date'=>$this->Date,
-            'content'=>$this->Content,
-            'authorName'=>$this->Author_name,
-        ];
+                'title' => $this->Title,
+                'date' => $this->Date,
+                'content' => $this->Content,
+                'authorName' => $this->Author_name,
+            ];
     }
 
     public function getTitle(): string
